@@ -1,0 +1,24 @@
+---
+import '../styles/global.css';
+export interface Props {
+  title: string;
+  description?: string;
+  lang?: string;
+}
+const { title, description = "Club de Pentatlón 5 en 1 en Villanueva de la Cañada, Madrid. Entrenamientos, competiciones, calendario de eventos y blog.", lang = "es" } = Astro.props;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body class="min-h-screen bg-paper text-neutral-900 antialiased flex flex-col">
+    <slot />
+  </body>
+</html>

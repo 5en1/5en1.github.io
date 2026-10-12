@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import CalendarGrid from '../../../components/CalendarGrid.astro';
+import { getCollection } from 'astro:content';
+
+const events = await getCollection('events', ({ data }: any) => data.locale === 'en' && !data.draft);
+const now = new Date();
+const year = now.getFullYear();
+const month = now.getMonth() + 1;
+const calendarEvents = events.map((ev: any) => ({
+  title: ev.data.title,
+  startDate: ev.data.startDate,
+  href: `/en/events/${(ev as any).slug || ev.id.split("/").pop().replace(/\.md$/, "")}`,
+  type: ev.data.type,
+}));
+const upcoming = events
+  .filter((ev: any) => ev.data.startDate >= new Date(now.getFullYear(), now.getMonth(), now.getDate()))
+  .sort((a: any, b: any) => a.data.startDate.getTime() - b.data.startDate.getTime());
+---
+<BaseLayout title="Events - 5 en 1" lang="en">
+  <Header />
+  <main class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold text-brand-950 mb-8">Events</h1>
+      <section class="mb-12">
+        <h2 class="text-xl font-semibold text-brand-950 mb-4">Calendar</h2>
+        <CalendarGrid year={year} month={month} events={calendarEvents} />
+      </section>
+      <section>
+        <h2 class="text-xl font-semibold text-brand-950 mb-4">Upcoming Events</h2>
+        {upcoming.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {upcoming.map((ev: any) => (
+              <div class="bg-white border border-neutral-200 rounded-lg p-4">
+                <h3 class="font-semibold text-brand-950">
+                  <a href={`/en/events/${(ev as any).slug || ev.id.split("/").pop().replace(/\.md$/, "")}`} class="hover:underline">{ev.data.title}</a>
+                </h3>
+                <p class="text-sm text-neutral-600 mt-1">{ev.data.startDate.toLocaleDateString('en-US')} - {ev.data.location}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p class="text-neutral-600">No upcoming events.</p>
+        )}
+      </section>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

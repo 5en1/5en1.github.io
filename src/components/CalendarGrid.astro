@@ -1,0 +1,81 @@
+---
+export interface Event {
+  title: string;
+  startDate: Date;
+  href: string;
+  type: 'competition' | 'camp' | 'other';
+}
+export interface Props {
+  year: number;
+  month: number; // 0-indexed or 1-indexed; easier use 1-12
+  events: Event[];
+}
+const { year, month, events } = Astro.props; // month is 1-12
+const isEN = Astro.url.pathname.startsWith('/en');
+const today = new Date();
+const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month - 1;
+const todayDate = today.getDate();
+
+// Get first day of month and number of days
+const firstDay = new Date(year, month - 1, 1);
+const lastDay = new Date(year, month, 0);
+const daysInMonth = lastDay.getDate();
+const dayOfWeek = firstDay.getDay(); // 0 = Sunday in JS, but better start Monday? Spanish convention varies; keep simple
+
+// Create calendar grid
+const dayNamesES = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+const dayNamesEN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const dayNames = isEN ? dayNamesEN : dayNamesES;
+
+// Adjust for Monday start? Common in Europe; simple approach: just show
+const cells: (number | null)[] = [];
+// fill leading days
+for (let i = 0; i < ((dayOfWeek + 6) % 7); i++) {
+  cells.push(null);
+}
+for (let d = 1; d <= daysInMonth; d++) {
+  cells.push(d);
+}
+
+// Group events by day
+const eventsByDay = new Map<number, Event[]>();
+for (const ev of events) {
+  const d = new Date(ev.startDate);
+  if (d.getFullYear() === year && d.getMonth() === month - 1) {
+    const day = d.getDate();
+    if (!eventsByDay.has(day)) eventsByDay.set(day, []);
+    eventsByDay.get(day)!.push(ev);
+  }
+}
+---
+<div class="bg-white border border-neutral-200 rounded-lg overflow-hidden">
+  <div class="grid grid-cols-7 bg-neutral-50 border-b border-neutral-200">
+    {dayNames.map(day => (
+      <div class="px-3 py-2 text-center text-xs font-medium text-neutral-600">
+        {day}
+      </div>
+    ))}
+  </div>
+  <div class="grid grid-cols-7">
+    {cells.map((day, idx) => (
+      <div class={`min-h-[80px] sm:min-h-[100px] border-b border-r border-neutral-200 p-1 ${idx % 7 === 6 ? 'border-r-0' : ''} ${Math.floor(idx / 7) * 7 + 7 >= cells.length ? 'border-b-0' : ''} ${isCurrentMonth && day === todayDate ? 'bg-accent-50' : ''}`}>
+        {day && (
+          <>
+            <div class={`text-xs mb-1 ${isCurrentMonth && day === todayDate ? 'inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent-600 text-white font-semibold' : 'text-neutral-600'}`}>{day}</div>
+            <div class="space-y-1">
+              {eventsByDay.get(day)?.map((ev, i) => (
+                <a
+                  href={ev.href}
+                  class="block text-xs px-1 py-0.5 rounded bg-brand-100 text-brand-900 hover:bg-brand-200 truncate"
+                  title={ev.title}
+                >
+                  {ev.title}
+                </a>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    ))}
+  </div>
+</div>

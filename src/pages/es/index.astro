@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import EventCard from '../../components/EventCard.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const events = await getCollection('events', ({ data }: any) => data.locale === 'es' && !data.draft);
+const sortedEvents = events.sort((a: any, b: any) => a.data.startDate.getTime() - b.data.startDate.getTime()).slice(0, 3);
+
+const posts = await getCollection('blog', ({ data }: any) => data.locale === 'es' && !data.draft);
+const sortedPosts = posts.sort((a: any, b: any) => b.data.pubDate.getTime() - a.data.pubDate.getTime()).slice(0, 3);
+---
+<BaseLayout title="5 en 1 - Club de Pentatlón Moderno" lang="es">
+  <Header />
+  <main>
+    <section class="bg-gradient-to-r from-brand-950 to-brand-800 text-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl sm:text-5xl font-bold mb-4">Club de Pentatlón Moderno 5 en 1</h1>
+        <p class="text-xl mb-8 text-brand-200">Villanueva de la Cañada, Madrid, España</p>
+        <p class="text-lg max-w-2xl mx-auto text-brand-50">
+          Somos un club de pentatlón moderno comprometido con el desarrollo deportivo, la formación de atletas y la promoción de este deporte.
+        </p>
+      </div>
+    </section>
+
+    <section class="py-12 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-brand-950 mb-8">Próximos Eventos</h2>
+        {sortedEvents.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sortedEvents.map((event: any) => (
+              <EventCard
+                title={event.data.title}
+                startDate={event.data.startDate}
+                location={event.data.location}
+                type={event.data.type}
+                href={`/es/events/${(event as any).slug || event.id.split("/").pop().replace(/\.md$/, "")}`}
+                description={event.data.description}
+              />
+            ))}
+          </div>
+        ) : (
+          <p class="text-neutral-600">No hay eventos próximos.</p>
+        )}
+        <div class="mt-8">
+          <a href="/es/events" class="text-brand-700 hover:text-accent-600 hover:underline font-medium">Ver todos los eventos →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-brand-950 mb-8">Últimas Entradas del Blog</h2>
+        {sortedPosts.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sortedPosts.map((post: any) => (
+              <PostCard
+                title={post.data.title}
+                pubDate={post.data.pubDate}
+                description={post.data.description}
+                href={`/es/blog/${(post as any).slug || post.id.split("/").pop().replace(/\.md$/, "")}`}
+                tags={post.data.tags}
+              />
+            ))}
+          </div>
+        ) : (
+          <p class="text-neutral-600">No hay entradas en el blog.</p>
+        )}
+        <div class="mt-8">
+          <a href="/es/blog" class="text-brand-700 hover:text-accent-600 hover:underline font-medium">Ver todo el blog →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

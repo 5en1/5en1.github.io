@@ -1,0 +1,39 @@
+---
+const currentPath = Astro.url.pathname;
+const isEN = currentPath.startsWith('/en');
+const socialLinks = [
+  { href: 'mailto:info@5en1.club', label: isEN ? 'Email' : 'Correo', icon: '✉️' },
+  { href: 'https://instagram.com/5en1club', label: 'Instagram', icon: '📸' },
+  { href: 'https://facebook.com/5en1club', label: 'Facebook', icon: '👥' },
+  { href: 'https://twitter.com/5en1club', label: 'Twitter', icon: '🐦' },
+];
+---
+<footer class="bg-brand-950 text-neutral-100 mt-auto">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="mb-4 md:mb-0">
+        <p class="text-sm text-neutral-200">
+          © {new Date().getFullYear()} Club de Pentatlón Moderno 5 en 1. 
+          {isEN ? 'All rights reserved.' : 'Todos los derechos reservados.'}
+        </p>
+        <p class="text-xs text-brand-300 mt-1">
+          {isEN ? 'Villanueva de la Cañada, Madrid, Spain' : 'Villanueva de la Cañada, Madrid, España'}
+        </p>
+      </div>
+      <div class="flex space-x-4">
+        {socialLinks.map(link => (
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-neutral-200 hover:text-accent-400 transition-colors text-sm"
+            aria-label={link.label}
+          >
+            <span class="mr-1">{link.icon}</span>
+            <span>{link.label}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</footer>

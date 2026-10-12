@@ -1,0 +1,50 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  /* Green - primary (Villanueva de la Cañada) */
+  --color-brand-50: #f4faf8;
+  --color-brand-100: #e5f5ee;
+  --color-brand-200: #c6ecdb;
+  --color-brand-300: #9adfc1;
+  --color-brand-400: #69d3a5;
+  --color-brand-500: #36c989;
+  --color-brand-600: #29a36e;
+  --color-brand-700: #1e8056;
+  --color-brand-800: #166442;
+  --color-brand-900: #0f482f;
+  --color-brand-950: #022918;
+
+  /* Red - accent (Comunidad de Madrid) */
+  --color-accent-50: #fbeff0;
+  --color-accent-100: #f8dde0;
+  --color-accent-200: #f4bec2;
+  --color-accent-300: #ec8d95;
+  --color-accent-400: #e75562;
+  --color-accent-500: #e31c2d;
+  --color-accent-600: #bc1d28;
+  --color-accent-700: #900e19;
+  --color-accent-800: #710a12;
+  --color-accent-900: #51060c;
+  --color-accent-950: #300307;
+
+  /* Neutral - white / surface (#eaeaea base) */
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f4f4f4;
+  --color-neutral-200: #eaeaea;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #b3b3b3;
+  --color-neutral-500: #8f8f8f;
+  --color-neutral-600: #6e6e6e;
+  --color-neutral-700: #525252;
+  --color-neutral-800: #3d3d3d;
+  --color-neutral-900: #262626;
+  --color-neutral-950: #171717;
+
+  /* Semantic */
+  --color-paper: #eaeaea;
+
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}

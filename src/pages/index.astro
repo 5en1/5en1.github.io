@@ -1,11 +1,18 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout title="5 en 1 - Club de Pentatlón Moderno" lang="es">
+  <main class="min-h-screen flex items-center justify-center bg-gradient-to-r from-brand-950 to-brand-800 text-white">
+    <div class="text-center">
+      <h1 class="text-4xl font-bold mb-4">Redirigiendo...</h1>
+      <p class="mb-8">Cargando el sitio en español</p>
+      <a href="/es/" class="bg-white text-brand-950 px-6 py-3 rounded font-medium hover:bg-brand-100">
+        Ir a la página principal
+      </a>
+    </div>
+    <script>
+      // Redirect to Spanish home
+      window.location.href = '/es/';
+    </script>
+  </main>
+</BaseLayout>
